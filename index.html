@@ -1,154 +1,74 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Login dan Portofolio</title>
+    <title>Login Page</title>
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
-            height: 100vh;
+            box-sizing: border-box;
+        }
+        body {
             display: flex;
             justify-content: center;
             align-items: center;
-            background-image: url('https://cdnpro.eraspace.com/media/mageplaza/blog/post/c/o/contohai-primary.jpg'); /* Ganti dengan URL gambar Anda */
-            background-size: cover;
-            background-position: center;
-            font-family: Arial, sans-serif;
+            height: 100vh;
+            background: url('https://cdnpro.eraspace.com/media/mageplaza/blog/post/c/o/contohai-primary.jpg') no-repeat center center/cover;
+            transition: background 0.5s ease;
         }
-
-        .login-container, .portfolio-container {
-            background: rgba(255, 255, 255, 0.8); /* Warna latar belakang dengan transparansi */
+        .login-container {
+            background: rgba(255, 255, 255, 0.8);
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
-
-        h2 {
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        input[type="text"],
-        input[type="password"],
-        textarea {
+        input {
+            display: block;
             width: 100%;
-            padding: 10px;
             margin: 10px 0;
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-
-        input[type="submit"] {
-            background-color: #2575fc;
+        button {
+            width: 100%;
+            padding: 10px;
+            background: blue;
             color: white;
             border: none;
-            padding: 10px;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
-
-        input[type="submit"]:hover {
-            background-color: #6a11cb;
-        }
-
-        .error {
-            color: red;
-            margin-top: 10px;
-        }
-
-        .portfolio-container {
-            display: none; /* Sembunyikan portofolio pada awal */
-        }
-
-        .welcome-message {
-            transition: opacity 1s;
-            opacity: 0;
-        }
-
-        .welcome-message.show {
-            opacity: 1;
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
-
-    <div class="login-container" id="loginContainer">
+    <div class="login-container" id="loginBox">
         <h2>Login</h2>
-        <form id="loginForm">
-            <input type="text" id="username" placeholder="Username" required>
-            <input type="password" id="password" placeholder="Password" required>
-            <input type="submit" value="Login">
-            <div class="error" id="errorMessage"></div>
-        </form>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
     </div>
-
-    <div class="portfolio-container" id="portfolioContainer">
-        <h2 class="welcome-message" id="welcomeMessage">Selamat datang di Apollo Project</h2>
-        <form id="messageForm">
-            <textarea id="message" placeholder="Tulis pesan Anda di sini..." required></textarea>
-            <input type="submit" value="Kirim Pesan">
-            <div class="error" id="sendMessageError"></div>
-        </form>
+    <div class="hidden" id="content">
+        <h1>Hello World!</h1>
     </div>
-
-    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script>
-        // Inisialisasi EmailJS
-        (function(){
-            emailjs.init("YOUR_USER_ID"); // Ganti dengan User ID EmailJS Anda
-        })();
-
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Mencegah form dari pengiriman default
-
-            const validUsername = "apollo";
-            const validPassword = "@Apollo2025";
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const errorMessage = document.getElementById('errorMessage');
-
-            if (username === validUsername && password === validPassword) {
-                // Tampilkan portofolio dan sembunyikan login
-                document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('portfolioContainer').style.display = 'block';
-
-                // Tampilkan pesan selamat datang dengan transisi
-                const welcomeMessage = document.getElementById('welcomeMessage');
-                welcomeMessage.classList.add('show');
+        function login() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            if (username === 'apollo' && password === '@Apollo2025') {
+                document.getElementById('loginBox').classList.add('hidden');
+                document.getElementById('content').classList.remove('hidden');
+                document.body.style.background = 'linear-gradient(to right, #4A00E0, #8E2DE2)';
             } else {
-                errorMessage.textContent = "Login gagal! Username atau password salah.";
+                alert('Username atau password salah!');
             }
         }
-        );
-
-        document.getElementById('messageForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Mencegah form dari pengiriman default
-
-            const message = document.getElementById('message').value;
-            const sendMessageError = document.getElementById('sendMessageError');
-
-            // Kirim pesan menggunakan EmailJS
-            const templateParams = {
-                message: message,
-                to_email: 'apollowireless66@gmail.com' // Ganti dengan email tujuan
-            };
-
-            emailjs.send('service_9liaqer', 'template_c6rfts7', templateParams)
-                .then(function(response) {
-                    console.log('SUCCESS!', response.status, response.text);
-                    alert('Pesan Anda telah dikirim!');
-                    document.getElementById('message').value = ''; // Kosongkan textarea setelah pengiriman
-                }, function(error) {
-                    console.log('FAILED...', error);
-                    sendMessageError.textContent = 'Gagal mengirim pesan. Silakan coba lagi.';
-                });
-        });
     </script>
-
 </body>
 </html>
